@@ -20,6 +20,12 @@ Container::Container(int id, std::string content, int fontSize) {
     this->id = id;
     this->content = content;
     this->position = Vector2{10, 10};
+    Rectangle body;
+    body.x = 10;
+    body.y = 10;
+    body.width = 300;
+    body.height = 150;
+    SetBody(&body);
     this->size = Vector2{300, 150};
     this->fontSize = fontSize;
     SetContentSize(MeasureText(GetContent().c_str(), GetFontSize()));
@@ -113,9 +119,17 @@ Link Container::FindLink(Link* link) {
 
 
 void Container::Draw() {
-    Rectangle body = Rectangle{GetPosition().x, GetPosition().y, GetSize().x, GetSize().y};
-    DrawRectangleRec(body, RED);
+    DrawRectangleRec(GetBody(), RED);
 
-    DrawText(GetContent().c_str(), (body.x - (float)GetContentSize()/2) + (body.width / 2) ,
-        (body.y - ((float)GetContentSize()/4)) + (body.height / 2) , GetFontSize(), GREEN);
+    DrawText(GetContent().c_str(), (GetBody().x - (float)GetContentSize()/2) + (GetBody().width / 2) ,
+        (GetBody().y - ((float)GetContentSize()/4)) + (GetBody().height / 2) , GetFontSize(), GREEN);
+}
+
+
+Rectangle Container::GetBody(void) {
+    return this->body;
+}
+
+void Container::SetBody(Rectangle* body) {
+  this->body = *body;
 }

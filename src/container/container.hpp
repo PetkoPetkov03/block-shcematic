@@ -53,6 +53,10 @@ class Container {
         int GetContentSize(void);
 
         void SetContentSize(int size);
+
+        Rectangle GetBody(void); 
+
+        void SetBody(Rectangle* body); 
     private:
         int id;
         std::string content;
@@ -61,6 +65,7 @@ class Container {
         Vector2 size;
         int contentSize;
         int fontSize;
+        Rectangle body;
 };
 
 #endif // !CONTAINER_H
