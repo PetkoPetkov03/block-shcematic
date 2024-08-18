@@ -11,12 +11,8 @@ Link::Link(int pid, int sid) {
     this->sid = sid;
 }
 
-Link::~Link() {
-    delete this;
-}
-
-
-Container::Container(int id, std::string content, int fontSize) {
+Container::Container(enum Behaviour behaviour, int id, std::string content, int fontSize) {
+    this->behaviour = behaviour;
     this->id = id;
     this->content = content;
     this->position = Vector2{10, 10};
@@ -29,10 +25,6 @@ Container::Container(int id, std::string content, int fontSize) {
     this->size = Vector2{300, 150};
     this->fontSize = fontSize;
     SetContentSize(MeasureText(GetContent().c_str(), GetFontSize()));
-}
-
-Container::~Container() {
-  delete this;
 }
 
 int Container::GetFontSize(void) {

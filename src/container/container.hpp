@@ -5,10 +5,16 @@
 #include <string>
 #include <vector>
 
+enum Behaviour {
+    STARTEND,
+    NORMAL,
+    FUNCTION,
+    CONDITIONAL,
+};
+
 class Link {
     public:
         Link(int pid, int sid);
-        ~Link();
 
         bool operator==(const Link& other) const {
             return this->pid == other.pid && this->sid == other.sid;
@@ -21,8 +27,11 @@ class Link {
 
 class Container {
     public:
-        Container(int id, std::string content, int fontSize);
-        ~Container();
+        Container(enum Behaviour behaviour, int id, std::string content, int fontSize);
+
+        bool operator==(const Container& other) const {
+            return this->id == other.id;
+        }
 
         int GetId();
         std::string GetContent(void);
@@ -57,7 +66,9 @@ class Container {
         Rectangle GetBody(void); 
 
         void SetBody(Rectangle* body); 
+
     private:
+        enum Behaviour behaviour;
         int id;
         std::string content;
         Vector2 position;
