@@ -3,9 +3,21 @@
 #include <algorithm>
 #include <cstdio>
 #include <cstdlib>
+#include <iostream>
+#include <ostream>
 #include <raylib.h>
 #include <string>
 #include <vector>
+#define RAYGUI_IMPLEMENTATION
+#include "../gui/raygui.h"
+#include <map>
+
+#define ARRAY_SIZE(A) (sizeof(A)/sizeof(typeof(A)))
+
+enum MenuState {
+    ON,
+    OFF,
+};
 
 enum RenderState {
     Input,
@@ -18,7 +30,7 @@ int selectedContainerIndex = -1;
 Container* selectedContainer = nullptr;
 
 void GenerateContainer(std::vector<Container*>* containers, std::string input) {
-    Container* newContainer = new Container(1, input, 40);
+    Container* newContainer = new Container(Behaviour::NORMAL, 1, input, 40);
 
     containers->push_back(newContainer);
 }
@@ -146,6 +158,10 @@ void SetMouseOnText(bool* mouseOnText, Rectangle* textBox) {
     else *mouseOnText = false;
 }
 
+enum Behaviour menuToBehaiviour(std::map<std::string, Behaviour> menuItems, std::string input) {
+        return menuItems[input];
+}
+
 int main(int argc, char* argv[]) {
     bool disableHotkeys = false;
     enum RenderState renderState = RenderState::Display;
@@ -168,6 +184,21 @@ int main(int argc, char* argv[]) {
 
     Rectangle textBox = { WIDTH/5.f, HEIGHT/2.f, WIDTH/1.5f, 50 };
     bool mouseOnText = false;
+
+
+    // Handle Menu
+    int menuState = MenuState::OFF;
+
+    int menuActive = -1, menuFocused = -1;
+
+    const std::string menuItems[] = {"START|END", "FUNCTIONAL", "CONDITIONAL", "NORMAL"};
+
+    std::map<std::string, Behaviour> behaviourMap = {
+      {menuItems[0], Behaviour::STARTEND},
+      {menuItems[1], Behaviour::FUNCTION},
+      {menuItems[2], Behaviour::CONDITIONAL},
+      {menuItems[3], Behaviour::NORMAL},
+    };
 
     while (!WindowShouldClose())
     {
@@ -194,6 +225,8 @@ int main(int argc, char* argv[]) {
             case RenderState::Input: {
                 BeginDrawing();
                 ClearBackground(RAYWHITE); 
+                Vector2 mosue = GetMousePosition();
+                GuiGrid((Rectangle){0, 0, WIDTH*1.f, HEIGHT*1.f}, "test",20.0f, 2, &mosue);
                 std::string inputTitle = "Input";
                 float inputTitleSize = MeasureText(inputTitle.c_str(), 30);
                 DrawText(inputTitle.c_str(), textBox.x, textBox.y - (inputTitleSize / 2), 30, RED);

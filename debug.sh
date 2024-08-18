@@ -2,7 +2,7 @@ if [ ! -d "./dist" ]
 then mkdir ./dist
 fi
 
-clang++ -g -o "./dist/block_scheme" ./src/main.cpp -lraylib 
+clang++ -g -o "./dist/block_scheme" ./src/main.cpp -lraylib ./gui/raygui.so 
 
 if [ !$1 ]
 then valgrind  --leak-check=yes -s ./dist/block_scheme
